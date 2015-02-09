@@ -4,82 +4,46 @@
     <title>Angular.js Training</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+    <style>
+    input.ng-touched.ng-invalid {
+      border: 5px solid red;
+    }
+    </style>
   </head>
   <body>
-    <!-- requirement
-    1. Declaratively list the tabs to be created
-    2. Be able to add new tabs on the fly
-    3. Display HTML content in the tabs
-    4. Allow the tabs to be loaded from a template
-    5. Initialize a list of tabs in the javascript
-    6. Unload inactive tabs from the dom
-    -->
     <div ng-app="MyApp">
       <div ng-controller="MyCtrl">
-        <tab-set tabs="tabs" current-tab="currentTab">
-          <tab tab-id="tab1" tab-caption="Tab 1">
-            Tab 1 Content
-          </tab>
-          <tab tab-id="tab2" tab-caption="Tab 2" tab-template-url="partials/template.html">
-          </tab>
-          <tab tab-id="tab3" tab-caption="Tab 3">
-            Tab 3 Content
-          </tab>
-          <tab tab-id="tab4" tab-caption="Tab 4">
-            Tab 4 Content
-          </tab>
-        </tab-set>
+        <form name="contactForm">
+          <input ng-model="person.firstName" name="personFirstName" required my-min-length="3">
+        </form>
       </div>
     </div>
     <script>
       angular.module("MyApp", [])
-      .controller("MyCtrl", function($scope){
-        $scope.currentTabs = "tab1";
-      })
-      .directive("tabSet", function($compile){
-        return {
-          scope: {
-            tabs: "=",
-            currentTab: "="
-          },
-          controller: function($scope, $element){
-            this.addTab = function(tabId, tabCaption, tabContent) {
-              $scope.tabs.push({
-                tabId: tabId,
-                tabCaption: tabCaption,
-                tabContent: tabContent
-              });
-            };
-          },
-          compile : function(tElement, tAttrs) {
-            return {
-              pre: function(scope, element, attr) {
-                if (!angular.isArray(scope.tabs)) {
-                  scope.tabs = [];
+        .directive("myMinLength", function() {
+          return {
+            require: "ngModel",
+            scope: {
+              minLength: "="
+            },
+            link: function(scope, element, attrs, ctrl) {
+              function validator(value) {
+                if (value === null || String(value).length < 3) {
+                  ctrl.$setValidity("my-min-length", false);
+                } else {
+                  ctrl.$setValidity("my-min-length", true);
                 }
-                scope.activateTab = function(tabId) {
-                  scope.currentTab = tabId;
-                };
-              },
-              post: function(scope, element, attr) {
-                element.empty();
-                var tpl = "<ul><li ng-repeat='tab in tabs' ng-click='activateTab(tab.tabId)'>{{tab.tabCaption}}</li></ul><div ng-if='tab.tabId === currentTab' ng-repeat='tab in tabs'>{{tab.tabContent}}</div>";
-                var linkingFn = $compile(tpl);
-                element.append(linkingFn(scope));
-                console.log(scope.tabs);
               }
-            };
-          }
-        };
-      })
-      .directive("tab", function(){
-        return {
-          require: "^tabSet",
-          link: function(scope, element, attrs, ctrl) {
-            ctrl.addTab(attrs.tabId, attrs.tabCaption, element.html());
-          }
-        };
-      });
+              ctrl.$parsers.push(validator);
+              ctrl.$formatters.push(validator);
+            }
+          };
+        })
+        .controller("MyCtrl", function($scope) {
+          setTimeout(function() {
+            console.dir($scope);
+          }, 2000);
+        });
 
     </script>
   </body>
