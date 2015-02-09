@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <div ng-app="MyApp">
+      <div ng-controller="MyCtrl">
+        Current Value: {{currentValue}}
+        <button simple-click="increment()">
+            Increment
+        </button>
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .directive("simpleClick", function(){
+          return {
+            scope: {
+              simpleClick : "&"
+            },
+            link: function(scope, element) {
+              element.on("click", function(e) {
+                scope.$apply(function() {
+                  scope.simpleClick(e);
+                });
+              });
+            }
+          };
+        })
+        .controller("MyCtrl", function($scope) {
+          $scope.currentValue = 0;
+          $scope.increment = function() {
+              $scope.currentValue++;
+          };
+        });
+
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <div ng-app="MyApp">
+      <script type="text/ng-template" id="./partials/template-js.html">inlined template</script>
+      <div ng-controller="MyCtrl">
+        <div template-exercise></div>
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .directive("templateExercise", function() {
+          return {
+              templateUrl: "./partials/template.html",
+              link: function (scope, element, attrs) {
+                  scope.originalMessage = "Original Content";
+                  scope.newMessage = "New Content";
+              }
+          };
+        })
+        .controller("MyCtrl", function($scope) {
+          $scope.message = "Hello There !!";
+        })
+        .run(function($templateCache) {
+          $templateCache.put("./partials/template.html", "<span>{{newMessage}}</span>");
+        })
+
+    </script>
+  </body>
+
+</html>
