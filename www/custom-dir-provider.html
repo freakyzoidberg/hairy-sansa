@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <!--
+    Exercise - Provider Method
+
+Step 1. Using the instructions in the Exercise Setup section, create a new HTML file named custom-dir-provider.html .
+
+Step 2. Copy the final factory service definition from the previous exercise into this exercise.
+
+Step 3. Modify the current factory registration to use a provider registration.
+
+Step 4. Add a function property named setPrefix to the provider to allow the developer to set a prefix for all messages logged out to the console window using the myLogger service. The function property should accept one parameter named prefix and assign the value passed in through prefix to a private variable defined in the provider registration function that is accessed via closure by the service’s provider object. An example of how the prefix is used is shown here:
+
+myLogger("sample message");
+The output the JavaScript console window would be:
+
+Some Prefix: sample message
+Step 5. Inject the myLogger provider into a config registration function. Using the provider object’s setPrefix method, set the desired prefix. The prefix can either be hard coded in the config method or it can be provided by a constant.
+
+Step 6. Using the HTTP protocol and the local Node.js web server, navigate to the HTML file with a web browser. What does the output of the JavaScript console window look like? Was the prefix added?
+
+Challenge: Decorate Angular.js’s built-in log service to specify a prefix to be prepended to all log function calls.
+
+You have completed the exercise!
+-->
+
+    <div ng-app="MyApp">
+      <div ng-controller="MyCtrl">
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .provider("myLogger", function() {
+          var prefix;
+          return  {
+            setPrefix: function(pref) {
+              prefix = pref;
+            },
+            $get: {
+              log: function() {
+                console.log(prefix + ": ");
+              }
+            }
+          };
+        })
+        .controller("MyCtrl", function($scope, myLogger) {
+          myLogger.log("hello");
+        })
+        .config(function(myLoggerProvider) {
+          myLoggerProvider.setPrefix("SomePrefix");
+        });
+    </script>
+  </body>
+</html>

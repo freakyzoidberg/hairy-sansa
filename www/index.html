@@ -9,8 +9,6 @@
     <div ng-app="MyApp">
       <div ng-controller="MyCtrl">
       </div>
-      <div ng-controller="MyCtrl2">
-      </div>
     </div>
     <script>
       angular.module("MyApp", [])
@@ -28,15 +26,26 @@
             console.log(message);
           };
         })
-
-        .controller("MyCtrl", function($scope, gizmo, bazar) {
-          gizmo.log("services are cool");
-          bazar.log("services are cool 2");
+        .provider("provi", function() {
+          var prefix = "App>";
+          return {
+            setPrefix : function(pref) {
+              prefix = pref;
+            },
+            $get : function () {
+              return {
+                log : function(message) {
+                  console.log(prefix + message);
+                }
+              };
+            }
+          };
         })
-        .controller("MyCtrl2", function($scope, gizmo, bazar) {
-          gizmo.log("2 services are cool");
-          bazar.log("2 services are cool 2");
-
+        .controller("MyCtrl", function($scope, gizmo, bazar, provi) {
+          provi.log("hello");
+        })
+        .config(function(proviProvider) {
+          proviProvider.setPrefix("hello>");
         });
     </script>
   </body>

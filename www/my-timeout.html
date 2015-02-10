@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <div ng-app="MyApp">
+      <div ng-controller="MyCtrl">
+        {{val}}
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .factory("myTimeout", function($rootScope) {
+          return function(cb, timeout) {
+            setTimeout(
+              function() {
+                $rootScope.$apply(function() {
+                  cb();
+                });
+              },
+              timeout);
+          };
+        })
+        .controller("MyCtrl", function($scope, myTimeout) {
+          myTimeout(function() {
+            console.log("execed");
+              $scope.val = "Yeah";
+            }, 100);
+        });
+    </script>
+  </body>
+</html>
