@@ -1,7 +1,7 @@
 Day 1
 =============
 
-(day 1)[http://bit.ly/1IBtdu2]
+[day 1](http://bit.ly/1IBtdu2)
 
 # Directives: #
 
