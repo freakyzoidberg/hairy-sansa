@@ -13,7 +13,7 @@
   <body>
     <div ng-app="MyApp">
       <div ng-controller="MyCtrl">
-        <div simple-bold simple-repeat="1"></div>
+        <div simple-bold simple-repeat="5"></div>
         {{message}}
       </div>
     </div>
@@ -21,7 +21,7 @@
       angular.module("MyApp", [])
         .directive("simpleBold", function() {
           return {
-              priority:50,
+              priority: 50,
               link: function(scope, element) {
                   console.log("simpleBold Link");
                   element.css("font-weight", "bold");
@@ -32,25 +32,21 @@
           return {
             priority: 100,
             terminal:true,
-            controller: function() {
-              console.log('2');
-            },
-            compile: function(tElements, tAttrs) {
+
+            compile: function(tElement, tAttrs) {
               var that = this;
               var count = parseInt(tAttrs.simpleRepeat);
-              var tpl = tElements[0].outerHTML;
-              
-              var parentElement = tpl.parentElement;
-              parentElement.children = [];
-              console.log(tpl);
-              //parentElement = [];
-              return {
-                post: function(scope) {
-                  var linkingFn = $compile(tpl);
-                  scope.message = "It worked!";
-                  var dom = linkingFn(scope);
-                  //parentElement.$children.push(dom);
+              var tpl = tElement[0].outerHTML;
+              var parentElement = tElement.parent();
+              parentElement.empty();
+
+              return function(scope) {
+                while (count--) {
+                  var linkingFn = $compile(tpl, null, that.priority);
+                  var dom = linkingFn(scope.$new());
+                  parentElement.append(dom);
                 }
+                //parentElement.$children.push(dom);
               };
             }
           };
