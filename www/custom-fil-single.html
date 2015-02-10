@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <div ng-app="App">
+        <div ng-controller="Ctrl">
+          {{ "hello" | myUpperCase}}
+        </div>
+    </div>
+    <script>
+
+        angular.module("App", [])
+            .filter("myUpperCase", function() {
+              return function(value) {
+                return String(value).toUpperCase();
+              }
+            })
+            .controller("Ctrl", function() {
+            });
+    </script>
+  </body>
+</html>

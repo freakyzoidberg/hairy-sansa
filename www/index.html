@@ -8,37 +8,21 @@
   <body>
     <div ng-app="MyApp">
       <div ng-controller="MyCtrl">
-        <div simple-repeat="color in colors">1 {{color}}</div>
+        {{message | myUpperCase}}
       </div>
     </div>
     <script>
       angular.module("MyApp", [])
-        .directive("simpleRepeat", function() {
-          return {
-            transclude: "element",
-            // template : CANNOT BE SET WHEN TRANSCLUDED
-            compile: function(tElement, tAttrs) {
-              var tokens = tAttrs.simpleRepeat.split(" ");
-              return function(scope, element, attrs, ctrl, transclude) {
-                var parentElement = element.parent();
-                angular.forEach(scope[tokens[2]], function(item) {
-                  var childScope = scope.$new();
-                  childScope[tokens[0]] = item;
-                  transclude(childScope, function(clone) {
-                      parentElement.append(clone);
-                  });
-                });
-              };
-            },
-            link : function(scope, element, attrs) {
-            }
+        .filter("myUpperCase", function($log) {
+          return function(value) {
+            $log.log(value);
+            return String(value).toUpperCase();
           };
         })
-        .controller("MyCtrl", function($scope, $interval) {
-          $scope.colors = ['orange', 'green', 'white'];
+        .controller("MyCtrl", function($scope, $filter) {
+          $scope.message = "hello";
+          var myValue = $filter("myUpperCase")("some value");
         });
-
     </script>
   </body>
-
 </html>
