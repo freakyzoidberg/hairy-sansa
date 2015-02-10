@@ -8,8 +8,9 @@
   <body>
     <div ng-app="App">
         <div ng-controller="Ctrl">
-          <textarea ng-model="msg2"></textarea>
-          <textarea>{{ msg | ellipsis:5}}</textarea>
+          <span>{{ msg | ellipsis:8}}</span>
+          <br/>
+          <textarea ng-model="msg"></textarea>
         </div>
     </div>
     <script>
@@ -17,14 +18,14 @@
         angular.module("App", [])
             .filter("ellipsis", function() {
               return function(value, truncateLength) {
-                if (value.length > truncateLength)
+                if (value.length > truncateLength - 1)
                   return String(value).substr(0, truncateLength - 3) + "...";
                 return value;
               };
             })
             .controller("Ctrl", function($scope, $filter) {
               $scope.msg = "helloo";
-              $scope.msg2 = $filter('ellipsis')("helloo", 5);
+              //$scope.msg2 = $filter('ellipsis')("helloo", 5);
             });
     </script>
   </body>

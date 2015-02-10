@@ -8,20 +8,35 @@
   <body>
     <div ng-app="MyApp">
       <div ng-controller="MyCtrl">
-        {{message | myUpperCase}}
+      </div>
+      <div ng-controller="MyCtrl2">
       </div>
     </div>
     <script>
       angular.module("MyApp", [])
-        .filter("myUpperCase", function($log) {
-          return function(value) {
-            $log.log(value);
-            return String(value).toUpperCase();
+        .factory("gizmo", function() {
+          console.log("gizmo");
+          return {
+            log: function(message) {
+              console.log(message);
+            }
           };
         })
-        .controller("MyCtrl", function($scope, $filter) {
-          $scope.message = "hello";
-          var myValue = $filter("myUpperCase")("some value");
+        .service("bazar", function() {
+          console.log("bazar");
+          this.log = function(message) {
+            console.log(message);
+          };
+        })
+
+        .controller("MyCtrl", function($scope, gizmo, bazar) {
+          gizmo.log("services are cool");
+          bazar.log("services are cool 2");
+        })
+        .controller("MyCtrl2", function($scope, gizmo, bazar) {
+          gizmo.log("2 services are cool");
+          bazar.log("2 services are cool 2");
+
         });
     </script>
   </body>
