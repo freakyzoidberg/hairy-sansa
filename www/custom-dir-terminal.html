@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+    <style>
+    input.ng-touched.ng-invalid {
+      border: 5px solid red;
+    }
+    </style>
+  </head>
+  <body>
+    <div ng-app="MyApp">
+      <div ng-controller="MyCtrl">
+        <div simple-bold simple-repeat="1"></div>
+        {{message}}
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .directive("simpleBold", function() {
+          return {
+              priority:50,
+              link: function(scope, element) {
+                  console.log("simpleBold Link");
+                  element.css("font-weight", "bold");
+              }
+          };
+        })
+        .directive("simpleRepeat", function($compile) {
+          return {
+            priority: 100,
+            terminal:true,
+            controller: function() {
+              console.log('2');
+            },
+            compile: function(tElements, tAttrs) {
+              var that = this;
+              var count = parseInt(tAttrs.simpleRepeat);
+              var tpl = tElements[0].outerHTML;
+              
+              var parentElement = tpl.parentElement;
+              parentElement.children = [];
+              console.log(tpl);
+              //parentElement = [];
+              return {
+                post: function(scope) {
+                  var linkingFn = $compile(tpl);
+                  scope.message = "It worked!";
+                  var dom = linkingFn(scope);
+                  //parentElement.$children.push(dom);
+                }
+              };
+            }
+          };
+        })
+        .controller("MyCtrl", function($scope) {
+          setTimeout(function() {
+            console.dir($scope);
+          }, 2000);
+        });
+
+    </script>
+  </body>
+
+</html>

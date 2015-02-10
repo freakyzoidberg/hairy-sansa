@@ -13,29 +13,24 @@
   <body>
     <div ng-app="MyApp">
       <div ng-controller="MyCtrl">
-        <form name="contactForm">
-          <input ng-model="person.firstName" name="personFirstName" required my-min-length="3">
-        </form>
+        <div first-dir second-dir></div>
       </div>
     </div>
     <script>
       angular.module("MyApp", [])
-        .directive("myMinLength", function() {
+        .directive("firstDir", function() {
           return {
-            require: "ngModel",
-            scope: {
-              minLength: "="
-            },
-            link: function(scope, element, attrs, ctrl) {
-              function validator(value) {
-                if (value === null || String(value).length < 3) {
-                  ctrl.$setValidity("my-min-length", false);
-                } else {
-                  ctrl.$setValidity("my-min-length", true);
-                }
-              }
-              ctrl.$parsers.push(validator);
-              ctrl.$formatters.push(validator);
+            priority: 50,
+            controller: function() {
+              console.log('1');
+            }
+          }
+        })
+        .directive("secondDir", function() {
+          return {
+            priority: 51,
+            controller: function() {
+              console.log('2');
             }
           };
         })
