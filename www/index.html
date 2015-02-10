@@ -4,40 +4,33 @@
     <title>Angular.js Training</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
-    <style>
-    input.ng-touched.ng-invalid {
-      border: 5px solid red;
-    }
-    </style>
   </head>
   <body>
     <div ng-app="MyApp">
       <div ng-controller="MyCtrl">
-        <div first-dir second-dir></div>
+        <div my-dir="{{msg}}"></div>
       </div>
     </div>
     <script>
       angular.module("MyApp", [])
-        .directive("firstDir", function() {
+        .directive("myDir", function() {
           return {
-            priority: 50,
-            controller: function() {
-              console.log('1');
+            link: function (scope, element, attrs) {
+              attrs.$addClass("my-class");
+              attrs.$observe("myDir", function(value) {
+                console.log(value);
+              });
             }
           };
         })
-        .directive("secondDir", function() {
-          return {
-            priority: 51,
-            controller: function() {
-              console.log('2');
-            }
-          };
-        })
-        .controller("MyCtrl", function($scope) {
-          setTimeout(function() {
-            console.dir($scope);
-          }, 2000);
+        .controller("MyCtrl", function($scope, $interval) {
+          $scope.msg = "message";
+          $scope.$watch("message", function(newValue, oldValue) {
+
+          });
+          $interval(function() {
+            $scope.msg += "!";
+          }, 500, 10);
         });
 
     </script>

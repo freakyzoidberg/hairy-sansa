@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <div ng-app="MyApp">
+      <div ng-controller="MyCtrl">
+        Current Value: {{currentValue}}
+        <div observe-exercise="{{currentValue}}"></div>
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .directive("observeExercise", function() {
+          return {
+              template: "Observe Value: {{observeValue}}",
+              scope: {
+                  theValue: "@observeExercise"
+              },
+              link: function(scope, element, attrs) {
+                attrs.$observe("observeExercise", function(value) {
+                  scope.observeValue = value;
+                });
+              }
+          };
+        })
+        .controller("MyCtrl", function($scope, $timeout, $interval) {
+          $scope.currentValue = 0;
+          var intervalPromise = $interval(function() {
+              $scope.currentValue++;
+          }, 500);
+          $timeout(function() {
+              $interval.cancel(intervalPromise);
+          }, 5000);
+        });
+
+    </script>
+  </body>
+
+</html>
