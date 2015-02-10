@@ -16,13 +16,13 @@
       angular.module("MyApp", [])
         .directive("observeExercise", function() {
           return {
-              template: "Observe Value: {{observeValue}}",
+              template: "Observe Value: {{theValue}}",
               scope: {
                   theValue: "@observeExercise"
               },
               link: function(scope, element, attrs) {
                 attrs.$observe("observeExercise", function(value) {
-                  scope.observeValue = value;
+                  scope.theValue = value;
                 });
               }
           };
