@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <div ng-app="MyApp">
+      <div ng-controller="MyCtrl">
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .controller("MyCtrl", function($q) {
+          var
+            krystianP = $q.defer(),
+            pierreP = $q.defer(),
+            marcP = $q.defer(),
+            emmaP = marcP.promise,
+            peterP = emmaP.then(function(result) {
+              console.log("emma starts");
+
+              var d = $q.defer();
+              setTimeout(function() {
+                d.resolve("emma is done");
+              }, 2000);
+              console.log("waiting on emma");
+              return d.promise;
+            });
+
+          peterP.then(function(result) {
+            console.log("Peter doing CR");
+          });
+
+
+          setTimeout(function(){
+            console.log("marc is resolved");
+            marcP.resolve("alldone");
+          }, 2000);
+
+          console.log("waiting on marc");
+
+
+          var lukaL = $q.all([
+            krystianP.promise,
+            pierreP.promise,
+            peterP]);
+
+          lukaL.then(function() {
+              console.log("PR");
+            });
+
+          setTimeout(function() {
+            krystianP.resolve();
+          }, 1000);
+
+          setTimeout(function() {
+            pierreP.resolve();
+          }, 2000);
+
+
+
+
+
+
+        });
+    </script>
+  </body>
+</html>
