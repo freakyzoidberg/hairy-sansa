@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Angular.js Training</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  </head>
+  <body>
+    <div ng-app="MyApp">
+      <div ng-controller="MyCtrl">
+      </div>
+    </div>
+    <script>
+      angular.module("MyApp", [])
+        .controller("MyCtrl", function($q) {
+          var
+            d1 = $q.defer(),
+            d2 = $q.defer(),
+            d3 = $q.defer(),
+            d4 = $q.defer();
+
+          $q.all([
+            d1.promise,
+            d2.promise,
+            d3.promise,
+            d4.promise])
+            .then(function() {
+              console.dir(arguments);
+              console.log("all done");
+            }, function() {
+              console.dir(arguments);
+              console.log("failed");
+            });
+
+          setTimeout(function() {
+            console.log("d1 done");
+            d1.resolve("d1 done");
+          }, 2000);
+          setTimeout(function() {
+            console.log("d2 done");
+            d2.resolve("d2 done");
+          }, 3000);
+          setTimeout(function() {
+            console.log("d4 done");
+            d4.resolve("d4 done");
+          }, 4000);
+          setTimeout(function() {
+            console.log("d3 done");
+            d3.resolve("d3 done");
+          }, 5000);
+
+
+        });
+    </script>
+  </body>
+</html>
