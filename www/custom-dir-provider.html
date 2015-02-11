@@ -38,22 +38,31 @@ You have completed the exercise!
       angular.module("MyApp", [])
         .provider("myLogger", function() {
           var prefix;
-          return  {
+          return {
             setPrefix: function(pref) {
               prefix = pref;
             },
-            $get: {
-              log: function() {
-                console.log(prefix + ": ");
-              }
+            $get: function() {
+              return function(msg) {
+                console.log(prefix + msg);
+              };
             }
           };
+
+        })
+        .config(function(myLoggerProvider, $provide) {
+          $provide.decorator("myLogger", function($delegate) {
+            var origLog = $delegate;
+            $delegate = function(message) {
+              origLog("decorator>" + message);
+            };
+            return $delegate;
+          });
+
+          myLoggerProvider.setPrefix("prefix>");
         })
         .controller("MyCtrl", function($scope, myLogger) {
-          myLogger.log("hello");
-        })
-        .config(function(myLoggerProvider) {
-          myLoggerProvider.setPrefix("SomePrefix");
+          myLogger("hello");
         });
     </script>
   </body>

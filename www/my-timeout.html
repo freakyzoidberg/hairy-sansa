@@ -17,9 +17,7 @@
           return function(cb, timeout) {
             setTimeout(
               function() {
-                $rootScope.$apply(function() {
-                  cb();
-                });
+                $rootScope.$apply(cb());
               },
               timeout);
           };
