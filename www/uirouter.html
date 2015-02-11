@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>Intermediate/Advanced Angular.js</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular.js"></script>
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.12/angular-route.js"></script> -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.13/angular-ui-router.js"></script>
+</head>
+
+<body>
+
+  <div ng-app="MyApp">
+    <div ui-view="top"></div>
+    <div ui-view="bottom"></div>
+
+    <!-- <div ng-controller="MyCtrl">
+      <table>
+        <tr>
+          <th>Name</th>
+          <th>Description</th>
+          <th>Color</th>
+          <th>Size</th>
+          <th>Quantity</th>
+        </tr>
+        <tr ng-repeat="widget in widgets">
+          <td>{{widget.name}}</td>
+          <td>{{widget.description}}</td>
+          <td>{{widget.color}}</td>
+          <td>{{widget.size}}</td>
+          <td>{{widget.quantity}}</td>
+
+        </tr>
+      </table>
+
+      <ng-include src="'partials/widget-form.html'"></ng-include> -->
+    </div>
+  </div>
+
+  <script>
+
+  angular.module("MyApp", ['ui.router'])
+    .config(function($stateProvider, $urlRouterProvider) {
+      $urlRouterProvider.otherwise('/');
+      $stateProvider
+        .state("home", {
+          url: "/",
+          templateUrl: "partials/home.html",
+          views: {
+            top: {
+              templateUrl: "partials/about.html",
+              controller: function($scope) {
+                $scope.about = 1;
+              }
+            },
+            bottom: {
+              templateUrl: "partials/mission.html",
+              controller: function($scope) {
+                $scope.mission = 2;
+
+              }
+            }
+          },
+        })
+        .state("home.about", {
+          url: "about",
+          views: {
+            "topChild": {
+              template:"hello"
+            }
+          }
+        });
+    })
+    .run(function($rootScope) {
+    });
+
+  </script>
+
+</body>
+</html>
